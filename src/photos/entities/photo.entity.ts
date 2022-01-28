@@ -18,7 +18,7 @@ export class Photo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'enum', enum: PhotoTypes })
   type: PhotoTypes;
 
   @CreateDateColumn({
