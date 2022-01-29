@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -29,9 +30,11 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response: Response) {
-    // + converte string para number
-    const result = await this.usersService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() response: Response
+  ) {
+    const result = await this.usersService.findOne(id);
     if (result instanceof Error) {
       return response.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
@@ -40,12 +43,11 @@ export class UsersController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
-    @Res() response: Response,
+    @Res() response: Response
   ) {
-    // + converte string para number
-    const result = await this.usersService.update(+id, updateUserDto);
+    const result = await this.usersService.update(id, updateUserDto);
     if (result instanceof Error) {
       return response.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
@@ -53,9 +55,11 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response: Response) {
-    // + converte string para number
-    const result = await this.usersService.remove(+id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() response: Response
+  ) {
+    const result = await this.usersService.remove(id);
     if (result instanceof Error) {
       return response.status(HttpStatus.BAD_REQUEST).json(result.message);
     }

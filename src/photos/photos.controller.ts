@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PhotosService } from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
@@ -36,9 +37,11 @@ export class PhotosController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response: Response) {
-    // + converte string para number
-    const result = await this.photosService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() response: Response
+  ) {
+    const result = await this.photosService.findOne(id);
     if (result instanceof Error) {
       return response.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
@@ -47,12 +50,11 @@ export class PhotosController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updatePhotoDto: UpdatePhotoDto,
     @Res() response: Response
   ) {
-    // + converte string para number
-    const result = await this.photosService.update(+id, updatePhotoDto);
+    const result = await this.photosService.update(id, updatePhotoDto);
     if (result instanceof Error) {
       return response.status(HttpStatus.BAD_REQUEST).json(result.message);
     }
@@ -60,9 +62,11 @@ export class PhotosController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response: Response) {
-    // + converte string para number
-    const result = await this.photosService.remove(+id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() response: Response
+  ) {
+    const result = await this.photosService.remove(id);
     if (result instanceof Error) {
       return response.status(HttpStatus.BAD_REQUEST).json(result.message);
     }

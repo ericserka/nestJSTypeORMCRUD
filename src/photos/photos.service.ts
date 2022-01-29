@@ -20,7 +20,6 @@ export class PhotosService {
     if (!(await user_repo.findOne(createPhotoDto.userId))) {
       return new Error('User not found');
     }
-    console.log(createPhotoDto);
     await this.photosRepository.save(
       this.photosRepository.create(createPhotoDto)
     );
