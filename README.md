@@ -28,6 +28,10 @@ $ npm run start:prod
 
 ```
 
+## Observations
+
+  - Whenever you create an entity, import it manually in the app.modeule.ts file.
+
 ## Some useful nest-cli commands:
 
 - `npx @nestjs/cli new <project_name>`
