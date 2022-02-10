@@ -7,6 +7,7 @@ import { CreatePhotoDto } from './create-photo.dto';
 export class UpdatePhotoDto extends PartialType(CreatePhotoDto) {
   @IsEnum(PhotoTypes)
   type: PhotoTypes;
+
   @IsNumber()
   userId: number;
 }

@@ -5,6 +5,7 @@ export class CreatePhotoDto {
   @IsNotEmpty()
   @IsEnum(PhotoTypes)
   type: PhotoTypes;
+
   @IsNotEmpty()
   @IsNumber()
   userId: number;
