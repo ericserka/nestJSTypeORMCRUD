@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
+import { TransactionDTO } from './dto/transaction.dto';
 
 @Controller('users')
 export class UsersController {
@@ -24,6 +25,16 @@ export class UsersController {
   @HttpCode(201)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
+  }
+
+  @Post('transaction_test')
+  @HttpCode(201)
+  async transaction_test(@Body() transactionDTO: TransactionDTO) {
+    return await this.usersService.transaction_test(
+      transactionDTO,
+      this.usersService.usersRepository,
+      this.usersService.photosRepository
+    );
   }
 
   @Get()

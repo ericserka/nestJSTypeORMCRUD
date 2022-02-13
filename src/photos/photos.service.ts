@@ -7,8 +7,9 @@ import { Photo } from './entities/photo.entity';
 
 @Injectable()
 export class PhotosService {
-  private readonly photosRepository: Repository<Photo>;
-  private readonly usersRepository: Repository<User>;
+  // colocando public para caso precise usar em Photosontroller
+  public readonly photosRepository: Repository<Photo>;
+  public readonly usersRepository: Repository<User>;
 
   constructor(connection: Connection) {
     this.photosRepository = connection.getRepository(Photo);

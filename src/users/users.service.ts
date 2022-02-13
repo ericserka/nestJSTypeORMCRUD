@@ -1,15 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, Connection } from 'typeorm';
+import { Photo } from 'src/photos/entities/photo.entity';
+import {
+  Repository,
+  Connection,
+  Transaction,
+  TransactionRepository,
+} from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { TransactionDTO } from './dto/transaction.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly usersRepository: Repository<User>;
+  // colocando public para usar em Photosontroller
+  public readonly usersRepository: Repository<User>;
+  public readonly photosRepository: Repository<Photo>;
 
   constructor(connection: Connection) {
     this.usersRepository = connection.getRepository(User);
+    this.photosRepository = connection.getRepository(Photo);
+  }
+
+  // transactions permitem que, se por algum motivo alguma query falhar, as outras querys que foram executadas com sucesso nao serao commitadas para o banco de dados (util para multiplos inserts, insert que depende de outro insert)
+  @Transaction()
+  async transaction_test(
+    transactionDTO: TransactionDTO,
+    @TransactionRepository(User) usersRepository: Repository<User>,
+    @TransactionRepository(Photo) photosRepository: Repository<Photo>
+  ) {
+    const usuario_criado = await usersRepository.save(
+      usersRepository.create({
+        firstName: transactionDTO.firstName,
+        lastName: transactionDTO.lastName,
+        isActive: transactionDTO.isActive,
+      })
+    );
+    console.log(usuario_criado.id);
+    // lancamento de erro para testar transcation
+    // throw new Error('error');
+    // quando da erro, o log abaixo nao eh para imprimir
+    console.log(usuario_criado.firstName);
+    await photosRepository.save(
+      photosRepository.create({
+        type: transactionDTO.type,
+        userId: usuario_criado.id,
+      })
+    );
+    return { message: 'sucesso' };
   }
 
   async create(createUserDto: CreateUserDto): Promise<void> {
