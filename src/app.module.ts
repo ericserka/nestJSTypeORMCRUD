@@ -7,16 +7,20 @@ import { UsersModule } from './users/users.module';
 import { PhotosModule } from './photos/photos.module';
 import { User } from './users/entities/user.entity';
 import { Photo } from './photos/entities/photo.entity';
+import { config } from 'dotenv';
+
+config();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'password',
-      database: 'nest_test',
+      host: process.env.DATABASE_HOST,
+      // + converte string para number
+      port: +process.env.DATABASE_PORT,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASS,
+      database: process.env.DATABASE_NAME,
       entities: [User, Photo],
       synchronize: true,
       autoLoadEntities: true,

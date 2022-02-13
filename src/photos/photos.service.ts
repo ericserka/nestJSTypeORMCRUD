@@ -1,23 +1,22 @@
-import { HttpCode, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
-import { getRepository, Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { Photo } from './entities/photo.entity';
 
 @Injectable()
 export class PhotosService {
-  constructor(
-    @InjectRepository(Photo)
-    private photosRepository: Repository<Photo>
-  ) {}
+  private readonly photosRepository: Repository<Photo>;
+  private readonly usersRepository: Repository<User>;
 
-  @HttpCode(201)
+  constructor(connection: Connection) {
+    this.photosRepository = connection.getRepository(Photo);
+    this.usersRepository = connection.getRepository(User);
+  }
+
   async create(createPhotoDto: CreatePhotoDto): Promise<void | Error> {
-    const user_repo = getRepository(User);
-
-    if (!(await user_repo.findOne(createPhotoDto.userId))) {
+    if (!(await this.usersRepository.findOne(createPhotoDto.userId))) {
       return new Error('User not found');
     }
     await this.photosRepository.save(
@@ -48,12 +47,10 @@ export class PhotosService {
     id: number,
     updatePhotoDto: UpdatePhotoDto
   ): Promise<void | Error> {
-    const user_repo = getRepository(User);
-
     const photo = await this.photosRepository.findOne(id);
     if (!photo) {
       return new Error('Photo not found');
-    } else if (!(await user_repo.findOne(updatePhotoDto.userId))) {
+    } else if (!(await this.usersRepository.findOne(updatePhotoDto.userId))) {
       return new Error('User not found');
     }
     photo.type = updatePhotoDto.type;
