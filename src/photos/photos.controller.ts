@@ -9,6 +9,7 @@ import {
   Res,
   HttpStatus,
   ParseIntPipe,
+  HttpException,
 } from '@nestjs/common';
 import { PhotosService } from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
@@ -26,7 +27,7 @@ export class PhotosController {
   ) {
     const result = await this.photosService.create(createPhotoDto);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.status(201).end();
   }
@@ -43,7 +44,7 @@ export class PhotosController {
   ) {
     const result = await this.photosService.findOne(id);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.json(result);
   }
@@ -56,7 +57,7 @@ export class PhotosController {
   ) {
     const result = await this.photosService.update(id, updatePhotoDto);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.status(204).end();
   }
@@ -68,7 +69,7 @@ export class PhotosController {
   ) {
     const result = await this.photosService.remove(id);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.status(204).end();
   }

@@ -10,6 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   HttpCode,
+  HttpException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -49,7 +50,7 @@ export class UsersController {
   ) {
     const result = await this.usersService.findOne(id);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.json(result);
   }
@@ -62,7 +63,7 @@ export class UsersController {
   ) {
     const result = await this.usersService.update(id, updateUserDto);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.status(204).end();
   }
@@ -74,7 +75,7 @@ export class UsersController {
   ) {
     const result = await this.usersService.remove(id);
     if (result instanceof Error) {
-      return response.status(HttpStatus.BAD_REQUEST).json(result.message);
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
     return response.status(204).end();
   }
