@@ -31,11 +31,7 @@ export class UsersController {
   @Post('transaction_test')
   @HttpCode(201)
   async transaction_test(@Body() transactionDTO: TransactionDTO) {
-    return await this.usersService.transaction_test(
-      transactionDTO,
-      this.usersService.usersRepository,
-      this.usersService.photosRepository
-    );
+    return await this.usersService.transaction_test(transactionDTO);
   }
 
   @Get()

@@ -13,28 +13,31 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  // colocando public para usar em Photosontroller
-  public readonly usersRepository: Repository<User>;
-  public readonly photosRepository: Repository<Photo>;
+  private readonly usersRepository: Repository<User>;
+  private readonly photosRepository: Repository<Photo>;
 
   constructor(connection: Connection) {
     this.usersRepository = connection.getRepository(User);
     this.photosRepository = connection.getRepository(Photo);
   }
 
+  async transaction_test(transactionDTO: TransactionDTO) {
+    return await this._transaction_test(
+      transactionDTO,
+      this.usersRepository,
+      this.photosRepository
+    );
+  }
+
   // transactions permitem que, se por algum motivo alguma query falhar, as outras querys que foram executadas com sucesso nao serao commitadas para o banco de dados (util para multiplos inserts, insert que depende de outro insert)
   @Transaction()
-  async transaction_test(
+  private async _transaction_test(
     transactionDTO: TransactionDTO,
     @TransactionRepository(User) usersRepository: Repository<User>,
     @TransactionRepository(Photo) photosRepository: Repository<Photo>
   ) {
     const usuario_criado = await usersRepository.save(
-      usersRepository.create({
-        firstName: transactionDTO.firstName,
-        lastName: transactionDTO.lastName,
-        isActive: transactionDTO.isActive,
-      })
+      usersRepository.create({ ...transactionDTO })
     );
     console.log(usuario_criado.id);
     // lancamento de erro para testar transcation
