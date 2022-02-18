@@ -47,7 +47,7 @@ export class UsersService {
     await photosRepository.save(
       photosRepository.create({
         type: transactionDTO.type,
-        userId: usuario_criado.id,
+        user: usuario_criado,
       })
     );
     return { message: 'sucesso' };

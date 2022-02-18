@@ -27,9 +27,6 @@ export class Photo {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @Column()
-  userId: number;
-
   @ManyToOne(() => User, (user) => user.photos, { nullable: false })
   user: User;
 }

@@ -16,7 +16,7 @@ export class PhotosService {
   }
 
   async create(createPhotoDto: CreatePhotoDto): Promise<void | Error> {
-    if (!(await this.usersRepository.findOne(createPhotoDto.userId))) {
+    if (!(await this.usersRepository.findOne(createPhotoDto.user.id))) {
       return new Error('User not found');
     }
     await this.photosRepository.save(
@@ -50,11 +50,11 @@ export class PhotosService {
     const photo = await this.photosRepository.findOne(id);
     if (!photo) {
       return new Error('Photo not found');
-    } else if (!(await this.usersRepository.findOne(updatePhotoDto.userId))) {
+    } else if (!(await this.usersRepository.findOne(updatePhotoDto.user.id))) {
       return new Error('User not found');
     }
     photo.type = updatePhotoDto.type;
-    photo.userId = updatePhotoDto.userId;
+    photo.user.id = updatePhotoDto.user.id;
     await this.photosRepository.save(photo);
   }
 
