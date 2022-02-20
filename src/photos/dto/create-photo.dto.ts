@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsObject } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { PhotoTypes } from '../entities/photo.entity';
 
@@ -8,5 +8,6 @@ export class CreatePhotoDto {
   type: PhotoTypes;
 
   @IsNotEmpty()
+  @IsObject()
   user: User;
 }

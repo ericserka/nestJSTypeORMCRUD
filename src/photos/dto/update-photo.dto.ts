@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsEnum, IsNumber } from 'class-validator';
+import { IsEnum, IsNumber, IsObject } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { PhotoTypes } from '../entities/photo.entity';
 import { CreatePhotoDto } from './create-photo.dto';
@@ -9,6 +9,6 @@ export class UpdatePhotoDto extends PartialType(CreatePhotoDto) {
   @IsEnum(PhotoTypes)
   type: PhotoTypes;
 
-  @IsNumber()
+  @IsObject()
   user: User;
 }
