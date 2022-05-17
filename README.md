@@ -39,6 +39,6 @@ $ npm run start:prod
 - `npx @nestjs/cli generate controller <controller_name>`
 - `npx @nestjs/cli generate service <service_name>`
 - `npx @nestjs/cli generate resource`
-  - Each Resource has DTO (request body) and Entity (model)
+  - Each Resource has DTO (request body), Entity (model), Controller and Service
 - `npx @nestjs/cli generate app <microservice_name>`
 - `npx @nestjs/cli generate library <library_name>`
